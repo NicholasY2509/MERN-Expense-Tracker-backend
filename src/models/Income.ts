@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 
-export interface IIncome {
+export interface IIncome extends Document {
     userId: mongoose.Types.ObjectId;
     icon?: string;
     source: string;

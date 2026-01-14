@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import { connectDB } from './config/db';
 import authRoutes from './routes/authRoutes';
-// import dashboardRoutes from './routes/dashboardRoutes';
+import dashboardRoutes from './routes/dashboardRoutes';
 import expenseRoutes from './routes/expenseRoutes';
 import incomeRoutes from './routes/incomeRoutes';
 
@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 connectDB();
 
 app.use("/api/v1/auth", authRoutes);
-// app.use("/api/v1/dashboard", dashboardRoutes);
+app.use("/api/v1/dashboard", dashboardRoutes);
 app.use("/api/v1/expense", expenseRoutes);
 app.use("/api/v1/income", incomeRoutes);
 
