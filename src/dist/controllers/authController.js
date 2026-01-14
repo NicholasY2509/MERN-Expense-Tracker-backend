@@ -31,17 +31,39 @@ const registerUser = async (req, res) => {
     }
 };
 exports.registerUser = registerUser;
-const loginUser = (req, res) => {
+const loginUser = async (req, res) => {
     try {
+        const { email, password } = req.body;
+        if (!email || !password) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+        const user = await User_1.default.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ message: "User not found" });
+        }
+        const isPasswordValid = await user.comparePassword(password);
+        if (!isPasswordValid) {
+            return res.status(400).json({ message: "Invalid password" });
+        }
+        const token = generateToken(user._id.toString());
+        res.status(200).json({ id: user._id.toString(), user, token });
     }
     catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Something went wrong" });
     }
 };
 exports.loginUser = loginUser;
-const getUserInfo = (req, res) => {
+const getUserInfo = async (req, res) => {
     try {
+        if (!req.user) {
+            return res.status(400).json({ message: "User not found" });
+        }
+        res.status(200).json({ user: req.user });
     }
     catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Something went wrong" });
     }
 };
 exports.getUserInfo = getUserInfo;
